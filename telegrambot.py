@@ -1,5 +1,6 @@
 # import telegram
 import telepot
+import requests
 import secrets
 import time
 import weather
@@ -21,13 +22,11 @@ def handle_message(msg):
     if command == '/ping':
         bot.sendMessage(chat_id, 'pong')
     elif command == "/weather":
-        try:
-            current_weather = weather.get_current_weather()
-            bot.sendMessage(chat_id, current_weather)
-        except Exception as e:
-            print("Не удалось получить текущую погоду")
-            print(e)
-            bot.sendMessage(chat_id, "Не удалось получить текущую погоду. Попробуйте позже")
+        cur_weather_request = requests.get('http://178.62.201.176/api/1.0/current')
+        if cur_weather_request.status_code == 200:
+            bot.sendMessage(chat_id, cur_weather_request.json())
+        else:
+            bot.sendMessage(chat_id, "Не удалось получить текущую погоду")
     elif command == "/tomorrow":
         # Прогноз на завтра
         try:
