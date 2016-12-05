@@ -1,7 +1,10 @@
 # coding: utf-8
-import requests
 import datetime
-import wind
+
+import requests
+
+from src.wunderground import wind
+
 
 class CurrentWeather:
   def __init__(self, current_weather_json):

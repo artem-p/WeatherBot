@@ -1,8 +1,8 @@
 # coding: utf-8
 import tweepy
-import forecast
-import send_email
-import secrets
+
+from src import secrets, send_email, forecast
+
 
 def get_api():
   auth = tweepy.OAuthHandler(consumer_key, consumer_secret)

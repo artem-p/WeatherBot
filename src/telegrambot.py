@@ -1,10 +1,11 @@
 # import telegram
-import telepot
-import requests
-import secrets
 import time
-import weather
-import forecast
+
+import requests
+import telepot
+
+from src import secrets, forecast
+from src.wunderground import weather
 
 AVAILABLE_COMMANDS = """Доступные команды:
 

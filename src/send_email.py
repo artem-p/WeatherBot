@@ -1,8 +1,9 @@
 # coding: utf-8
 import smtplib
-import secrets
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
+from src import secrets
 
 
 def send(addr_to, message_body):
