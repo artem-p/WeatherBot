@@ -6,6 +6,7 @@ import telepot
 
 from src import secrets, forecast
 from src.wunderground import weather
+from src import chat
 
 AVAILABLE_COMMANDS = """Доступные команды:
 
@@ -19,27 +20,37 @@ weather.get_current_weather()
 def handle_message(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
 
-    command = msg['text']
-    if command == '/ping':
-        bot.sendMessage(chat_id, 'pong')
-    elif command == "/weather":
-        cur_weather_request = requests.get('http://178.62.201.176/api/1.0/current')
+    message = msg['text']
+    request_type, request_url = chat.get_request_info_by_message(message)
+
+    if request_type == chat.request_type_cur_weather:
+        cur_weather_request = requests.get(request_url)
         if cur_weather_request.status_code == 200:
             bot.sendMessage(chat_id, cur_weather_request.json())
         else:
             bot.sendMessage(chat_id, "Не удалось получить текущую погоду")
-    elif command == "/tomorrow":
-        # Прогноз на завтра
-        try:
-            fcst = forecast.get_tomorrow_forecast()
-            bot.sendMessage(chat_id, fcst.to_text())
-        except Exception as e:
-            print("Не удалось получить прогноз на завтра")
-            print(e)
-            bot.sendMessage(chat_id, "Не удалось получить прогноз на завтра. Попробуйте позже")
 
-    else:
-        bot.sendMessage(chat_id, AVAILABLE_COMMANDS)
+    # if command == '/ping':
+    #     bot.sendMessage(chat_id, 'pong')
+    # elif command == "/weather":
+    #     request_url = chat.get_request_info_by_message()
+    #     cur_weather_request = requests.get('http://178.62.201.176/api/1.0/current')
+    #     if cur_weather_request.status_code == 200:
+    #         bot.sendMessage(chat_id, cur_weather_request.json())
+    #     else:
+    #         bot.sendMessage(chat_id, "Не удалось получить текущую погоду")
+    # elif command == "/tomorrow":
+    #     # Прогноз на завтра
+    #     try:
+    #         fcst = forecast.get_tomorrow_forecast()
+    #         bot.sendMessage(chat_id, fcst.to_text())
+    #     except Exception as e:
+    #         print("Не удалось получить прогноз на завтра")
+    #         print(e)
+    #         bot.sendMessage(chat_id, "Не удалось получить прогноз на завтра. Попробуйте позже")
+    #
+    # else:
+    #     bot.sendMessage(chat_id, AVAILABLE_COMMANDS)
 
 #   bot.sendMessage(chat_id, msg['text'])
 
