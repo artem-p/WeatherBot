@@ -9,4 +9,7 @@ def get_request_info_by_message(message):
     """
     cur_weather_default = 'http://178.62.201.176/api/1.0/current'
 
-    return request_type_cur_weather, cur_weather_default
+    # assume that all message is location
+    cur_weather_location = cur_weather_default + "?location=" + message
+
+    return request_type_cur_weather, cur_weather_location
