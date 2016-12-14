@@ -2,6 +2,9 @@ request_type_cur_weather = 1
 import nltk
 import string
 from nltk.corpus import stopwords
+import pymorphy2
+g_morph = pymorphy2.MorphAnalyzer()
+
 
 def get_request_info_by_message(message):
     """
@@ -34,4 +37,18 @@ def tokenize(message):
     stop_words.extend(['что', 'это', 'так', 'вот', 'быть', 'как', 'в', 'к', 'на'])
     tokens = [token for token in tokens if (token not in stop_words)]
 
+    # to normal form
+    tokens = [get_normal_form(token) for token in tokens]
+
     return tokens
+
+
+def get_normal_form(word):
+    normal_form_word = word
+    morphs = g_morph.parse(word)
+
+    if len(morphs) > 0:
+        morph = morphs[0]
+        normal_form_word = morph.normal_form
+
+    return normal_form_word
