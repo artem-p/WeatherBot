@@ -14,11 +14,22 @@ def get_request_info_by_message(message):
     :return: type: request type constant, url: str
     """
     cur_weather_default = 'http://178.62.201.176/api/1.0/current'
+    request_type = request_type_cur_weather
+    request_url = cur_weather_default
 
-    # by default assume that all message is location
-    cur_weather_location = cur_weather_default + "?location=" + message
+    tokens = tokenize(message)
 
-    return request_type_cur_weather, cur_weather_location
+    if len(tokens) == 1:
+        # assume that it is location
+        request_url = cur_weather_default + "?location=" + message
+        request_type = request_type_cur_weather
+    if len(tokens) > 1:
+        # todo не завязываться на конкретные позиции токенов.
+        if "погода" in tokens or "сейчас" in tokens:
+            request_type = request_type_cur_weather
+            request_url = cur_weather_default + "?location=" + tokens[len(tokens) - 1]
+
+    return request_type, request_url
 
 
 def tokenize(message):
