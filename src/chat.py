@@ -24,7 +24,7 @@ def get_request_info_by_message(message):
         request_url = cur_weather_default + "?location=" + message
         request_type = request_type_cur_weather
     if len(tokens) > 1:
-        # todo не завязываться на конкретные позиции токенов.
+        # todo Выделяем ключевые слова отдельно. В остатке проверяем loc2, берем его, если есть. Если нет, просто остаток.
         if "погода" in tokens or "сейчас" in tokens:
             request_type = request_type_cur_weather
             request_url = cur_weather_default + "?location=" + tokens[len(tokens) - 1]
