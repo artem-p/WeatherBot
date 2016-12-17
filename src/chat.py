@@ -5,6 +5,7 @@ import pymorphy2
 
 request_type_cur_weather = 1
 request_type_tomorrow = 2
+default_location = "Санкт-Петербург"
 
 g_morph = pymorphy2.MorphAnalyzer()
 g_keywords = ["погода", "сейчас", "завтра", "утром", "днем", "вечером"]
@@ -30,16 +31,24 @@ def get_location_and_request_type(message):
     :return: int: request_type, str: location
     """
     tokens = tokenize(message)
+    location = default_location
+    request_type = request_type_cur_weather
 
-    # if len(tokens) == 1:
-    #     token = tokens[0]
-    #     if is_keyword(token):
-    #
-    #
-    #     # assume that it is location
-    #     request_url = cur_weather_default + "?location=" + message
-    #     request_type = request_type_cur_weather
-    #
+    if len(tokens) == 1:
+        token = tokens[0]
+        if is_keyword(token):
+            # we have keyword, location will be default
+            request_type = get_request_type_by_keyword(token)
+            location = default_location
+        else:
+            # assume that it is location, request type current by default
+            request_type = request_type_cur_weather
+            location = token
+    # todo test
+    return request_type, location
+
+
+
     # if len(tokens) > 1:
     #     # todo Выделяем ключевые слова отдельно. В остатке проверяем loc2, берем его, если есть. Если нет, просто остаток.
     #     keywords = filter(is_keyword, tokens)

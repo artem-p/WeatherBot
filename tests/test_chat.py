@@ -37,3 +37,7 @@ def test_get_request_type_by_keyword():
 
     keyword = "сейчас"
     assert chat.get_request_type_by_keyword(keyword) == chat.request_type_cur_weather
+
+
+def test_get_request_type_and_location():
+    pass
