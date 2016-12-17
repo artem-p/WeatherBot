@@ -1,9 +1,13 @@
-request_type_cur_weather = 1
 import nltk
 import string
 from nltk.corpus import stopwords
 import pymorphy2
+
+request_type_cur_weather = 1
+request_type_tomorrow = 2
+
 g_morph = pymorphy2.MorphAnalyzer()
+g_keywords = ["погода", "сейчас", "завтра", "утром", "днем", "вечером"]
 
 
 def get_request_info_by_message(message):
@@ -16,26 +20,55 @@ def get_request_info_by_message(message):
     cur_weather_default = 'http://178.62.201.176/api/1.0/current'
     request_type = request_type_cur_weather
     request_url = cur_weather_default
+    return request_type, request_url
 
+
+def get_location_and_request_type(message):
+    """
+    parse message. Get requested location and request type (current, tomorrow, etc)
+    :param message:
+    :return: int: request_type, str: location
+    """
     tokens = tokenize(message)
 
-    if len(tokens) == 1:
-        # assume that it is location
-        request_url = cur_weather_default + "?location=" + message
+    # if len(tokens) == 1:
+    #     token = tokens[0]
+    #     if is_keyword(token):
+    #
+    #
+    #     # assume that it is location
+    #     request_url = cur_weather_default + "?location=" + message
+    #     request_type = request_type_cur_weather
+    #
+    # if len(tokens) > 1:
+    #     # todo Выделяем ключевые слова отдельно. В остатке проверяем loc2, берем его, если есть. Если нет, просто остаток.
+    #     keywords = filter(is_keyword, tokens)
+    #     without_keywords = ...
+    #     location = ...
+    #
+    # else:
+    #     pass
+
+
+def is_keyword(word):
+    """
+    check if word is keyword
+    :param word:
+    :return:
+    """
+    return True if word in g_keywords else False
+
+
+def get_request_type_by_keyword(word):
+    request_type = request_type_cur_weather
+
+    if word == "погода" or word == "сейчас":
         request_type = request_type_cur_weather
-    if len(tokens) > 1:
-        # todo Выделяем ключевые слова отдельно. В остатке проверяем loc2, берем его, если есть. Если нет, просто остаток.
-        keywords = ...
-        without_keywords = ...
-        location = ...
 
+    elif word == "завтра":
+        request_type = request_type_tomorrow
 
-
-        if "погода" in tokens or "сейчас" in tokens:
-            request_type = request_type_cur_weather
-            request_url = cur_weather_default + "?location=" + tokens[len(tokens) - 1]
-
-    return request_type, request_url
+    return request_type
 
 
 def tokenize(message):
