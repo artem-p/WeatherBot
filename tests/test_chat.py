@@ -40,4 +40,8 @@ def test_get_request_type_by_keyword():
 
 
 def test_get_request_type_and_location():
-    pass
+    message = "Погода"
+    assert chat.get_request_type_and_location(message) == (chat.request_type_cur_weather, chat.default_location)
+
+    message = "Питер"
+    assert chat.get_request_type_and_location(message) == (chat.request_type_cur_weather, "питер")

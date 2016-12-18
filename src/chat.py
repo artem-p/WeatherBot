@@ -6,6 +6,8 @@ import pymorphy2
 request_type_none = 0
 request_type_cur_weather = 1
 request_type_tomorrow = 2
+request_type_default = request_type_cur_weather
+
 default_location = "Санкт-Петербург"
 
 g_morph = pymorphy2.MorphAnalyzer()
@@ -38,7 +40,7 @@ def get_request_info_by_message(message):
     request_type = request_type_none
     request_url = ""
 
-    request_type, location = get_location_and_request_type(message)
+    request_type, location = get_request_type_and_location(message)
 
     if request_type is not request_type_none:
         # todo make request url from type and location
@@ -47,7 +49,7 @@ def get_request_info_by_message(message):
     return request_type, request_url
 
 
-def get_location_and_request_type(message):
+def get_request_type_and_location(message):
     """
     parse message. Get requested location and request type (current, tomorrow, etc)
     :param message:
@@ -65,10 +67,20 @@ def get_location_and_request_type(message):
             location = default_location
         else:
             # assume that it is location, request type current by default
-            request_type = request_type_cur_weather
+            request_type = request_type_default
             location = token
-    # todo test
-    return request_type, location
+    else:
+        keywords = list(filter(is_keyword, tokens))
+        without_keywords = list(filter(not is_keyword, tokens))
+
+        if len(keywords) > 0:
+            # todo
+            pass
+        else:
+            request_type = request_type_default
+
+        # todo get location
+        return request_type, location
 
 
 
