@@ -3,12 +3,29 @@ import string
 from nltk.corpus import stopwords
 import pymorphy2
 
+request_type_none = 0
 request_type_cur_weather = 1
 request_type_tomorrow = 2
 default_location = "Санкт-Петербург"
 
 g_morph = pymorphy2.MorphAnalyzer()
 g_keywords = ["погода", "сейчас", "завтра", "утром", "днем", "вечером"]
+
+
+def get_response(message):
+    """
+    response to message
+    :param message:
+    :return: str
+    """
+    request_type, url = get_request_info_by_message(message)
+
+    if request_type is not request_type_none:
+        # todo owm request
+        pass
+    else:
+        # todo return cannot parse request
+        pass
 
 
 def get_request_info_by_message(message):
@@ -18,9 +35,15 @@ def get_request_info_by_message(message):
 
     :return: type: request type constant, url: str
     """
-    cur_weather_default = 'http://178.62.201.176/api/1.0/current'
-    request_type = request_type_cur_weather
-    request_url = cur_weather_default
+    request_type = request_type_none
+    request_url = ""
+
+    request_type, location = get_location_and_request_type(message)
+
+    if request_type is not request_type_none:
+        # todo make request url from type and location
+        pass
+
     return request_type, request_url
 
 
@@ -57,6 +80,7 @@ def get_location_and_request_type(message):
     #
     # else:
     #     pass
+
 
 
 def is_keyword(word):
