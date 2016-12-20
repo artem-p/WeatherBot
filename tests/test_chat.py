@@ -31,17 +31,20 @@ def test_is_keyword():
     assert chat.is_keyword(word) == False
 
 
-def test_get_request_type_by_keyword():
-    keyword = "погода"
-    assert chat.get_request_type_by_keyword(keyword) == chat.request_type_cur_weather
-
-    keyword = "сейчас"
-    assert chat.get_request_type_by_keyword(keyword) == chat.request_type_cur_weather
-
-
 def test_get_request_type_and_location():
     message = "Погода"
     assert chat.get_request_type_and_location(message) == (chat.request_type_cur_weather, chat.default_location)
 
     message = "Питер"
     assert chat.get_request_type_and_location(message) == (chat.request_type_cur_weather, "питер")
+
+
+def test_get_request_type_by_keywords():
+    keywords = ["погода", "питер"]
+    assert chat.get_request_type_by_keywords(keywords) == chat.request_type_cur_weather
+
+    keywords = ["сейчас"]
+    assert chat.get_request_type_by_keywords(keywords) == chat.request_type_cur_weather
+
+    keywords = ["питер", "завтра", "погода"]
+    assert chat.get_request_type_by_keywords(keywords) == chat.request_type_tomorrow

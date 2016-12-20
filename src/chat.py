@@ -63,7 +63,7 @@ def get_request_type_and_location(message):
         token = tokens[0]
         if is_keyword(token):
             # we have keyword, location will be default
-            request_type = get_request_type_by_keyword(token)
+            request_type = get_request_type_by_keywords(token)
             location = default_location
         else:
             # assume that it is location, request type current by default
@@ -74,15 +74,12 @@ def get_request_type_and_location(message):
         without_keywords = list(filter(not is_keyword, tokens))
 
         if len(keywords) > 0:
-            # todo
-            pass
+            request_type = get_request_type_by_keywords(keywords)
         else:
             request_type = request_type_default
 
-        # todo get location
-        return request_type, location
-
-
+    # todo get location
+    return request_type, location
 
     # if len(tokens) > 1:
     #     # todo Выделяем ключевые слова отдельно. В остатке проверяем loc2, берем его, если есть. Если нет, просто остаток.
@@ -94,6 +91,17 @@ def get_request_type_and_location(message):
     #     pass
 
 
+def get_request_type_by_keywords(keywords):
+    #   getting request type by few keywords
+    request_type = request_type_none
+    if "погода" or "сейчас" in keywords:
+        request_type = request_type_cur_weather
+
+    if "завтра" in keywords:
+        request_type = request_type_tomorrow
+
+    return request_type
+
 
 def is_keyword(word):
     """
@@ -102,18 +110,6 @@ def is_keyword(word):
     :return:
     """
     return True if word in g_keywords else False
-
-
-def get_request_type_by_keyword(word):
-    request_type = request_type_cur_weather
-
-    if word == "погода" or word == "сейчас":
-        request_type = request_type_cur_weather
-
-    elif word == "завтра":
-        request_type = request_type_tomorrow
-
-    return request_type
 
 
 def tokenize(message):
