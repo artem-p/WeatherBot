@@ -78,7 +78,8 @@ def get_request_type_and_location(message):
         else:
             request_type = request_type_default
 
-    # todo get location
+        # todo get location
+        location = get_location(without_keywords)
     return request_type, location
 
     # if len(tokens) > 1:
@@ -89,6 +90,32 @@ def get_request_type_and_location(message):
     #
     # else:
     #     pass
+
+
+def get_location(tokens_without_keywords):
+    """
+    getting location. find token in locative form. If no, get default
+    :param tokens_without_keywords:
+    :return:
+    """
+    location = default_location
+
+    if len(tokens_without_keywords) > 0:
+        locative_tokens = list(filter(is_locative, tokens_without_keywords))
+        if len(locative_tokens) > 0:
+            location = locative_tokens[0]
+
+    return location
+
+
+def is_locative(token):
+    """
+    check if token is in locative form
+    :param token:
+    :return:
+    """
+    # todo
+    pass
 
 
 def get_request_type_by_keywords(keywords):

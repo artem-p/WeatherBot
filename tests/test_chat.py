@@ -48,3 +48,19 @@ def test_get_request_type_by_keywords():
 
     keywords = ["питер", "завтра", "погода"]
     assert chat.get_request_type_by_keywords(keywords) == chat.request_type_tomorrow
+
+
+def test_is_locative():
+    token = "питер"
+    assert chat.is_locative(token) is False
+
+    token = "питере"
+    assert chat.is_locative(token) is True
+
+
+def test_get_location():
+    tokens = ["нет", "формы", "loc2"]
+    assert chat.get_location(tokens) == chat.default_location
+
+    tokens = ["есть", "форма", "loc2", "питере"]
+    assert chat.get_location() == "питер"
