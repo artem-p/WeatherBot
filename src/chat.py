@@ -84,7 +84,7 @@ def get_request_type_and_location(message):
 
 def get_location(tokens_without_keywords):
     """
-    getting location. find token in locative form. If no, get default
+    getting location. find token in locative form. If no, get first
     :param tokens_without_keywords:
     :return:
     """
@@ -94,7 +94,9 @@ def get_location(tokens_without_keywords):
         locative_tokens = list(filter(is_locative, tokens_without_keywords))
         if len(locative_tokens) > 0:
             location = locative_tokens[0]
-            # todo to normal form
+            location = get_normal_form(location)
+        else:
+            location = tokens_without_keywords[0]
 
     return location
 
@@ -138,7 +140,7 @@ def is_keyword(word):
 
 def tokenize(message):
     """
-    tokenize message. Delete punctuation, etc. Transform to normal form
+    tokenize message. Delete punctuation, etc. Transform to lower case
     :param message:
     :return: list with tokens
     """
@@ -152,8 +154,7 @@ def tokenize(message):
     stop_words.extend(['что', 'это', 'так', 'вот', 'быть', 'как', 'в', 'к', 'на'])
     tokens = [token for token in tokens if (token not in stop_words)]
 
-    # to normal form
-    tokens = [get_normal_form(token) for token in tokens]
+    tokens = [token.lower() for token in tokens]
 
     return tokens
 

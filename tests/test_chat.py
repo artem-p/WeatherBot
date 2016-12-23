@@ -12,11 +12,11 @@ def test_tokenize():
 
     message = "Погода в Питере"
     tokens = chat.tokenize(message)
-    assert tokens == ['погода', 'питер']
+    assert tokens == ['погода', 'питере']
 
     message = "Погода в Москве"
     tokens = chat.tokenize(message)
-    assert tokens == ['погода', 'москва']
+    assert tokens == ['погода', 'москве']
 
     message = "Сейчас Санкт-Петербург"
     tokens = chat.tokenize(message)
@@ -66,7 +66,13 @@ def test_is_locative():
 
 def test_get_location():
     tokens = ["нет", "формы", "loc2"]
-    assert chat.get_location(tokens) == chat.default_location
+    assert chat.get_location(tokens) == "нет"
 
     tokens = ["есть", "форма", "loc2", "питере"]
     assert chat.get_location(tokens) == "питер"
+
+    tokens = ["питере"]
+    assert chat.get_location(tokens) == "питер"
+
+    tokens = ["петербург"]
+    assert chat.get_location(tokens) == "петербург"
