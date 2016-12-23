@@ -94,6 +94,7 @@ def get_location(tokens_without_keywords):
         locative_tokens = list(filter(is_locative, tokens_without_keywords))
         if len(locative_tokens) > 0:
             location = locative_tokens[0]
+            # todo to normal form
 
     return location
 
