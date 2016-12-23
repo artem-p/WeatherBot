@@ -4,6 +4,7 @@ import time
 import requests
 import telepot
 
+import src.weather_connect
 from src import secrets, forecast
 from src.wunderground import weather
 from src import chat
@@ -23,7 +24,7 @@ def handle_message(msg):
     message = msg['text']
     request_type, request_url = chat.get_request_info_by_message(message)
 
-    if request_type == chat.request_type_cur_weather:
+    if request_type == src.weather_connect.request_type_cur_weather:
         cur_weather_request = requests.get(request_url)
         if cur_weather_request.status_code == 200:
             bot.sendMessage(chat_id, cur_weather_request.json())

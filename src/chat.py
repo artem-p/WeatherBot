@@ -1,12 +1,10 @@
-import nltk
 import string
-from nltk.corpus import stopwords
-import pymorphy2
 
-request_type_none = 0
-request_type_cur_weather = 1
-request_type_tomorrow = 2
-request_type_default = request_type_cur_weather
+import nltk
+import pymorphy2
+from nltk.corpus import stopwords
+
+from src.weather_connect import request_type_none, request_type_cur_weather, request_type_tomorrow, request_type_default
 
 default_location = "Санкт-Петербург"
 

@@ -1,3 +1,4 @@
+import src.weather_connect
 from src import chat
 
 
@@ -33,21 +34,22 @@ def test_is_keyword():
 
 def test_get_request_type_and_location():
     message = "Погода"
-    assert chat.get_request_type_and_location(message) == (chat.request_type_cur_weather, chat.default_location)
+    assert chat.get_request_type_and_location(message) == (
+    src.weather_connect.request_type_cur_weather, chat.default_location)
 
     message = "Питер"
-    assert chat.get_request_type_and_location(message) == (chat.request_type_cur_weather, "питер")
+    assert chat.get_request_type_and_location(message) == (src.weather_connect.request_type_cur_weather, "питер")
 
 
 def test_get_request_type_by_keywords():
     keywords = ["погода", "питер"]
-    assert chat.get_request_type_by_keywords(keywords) == chat.request_type_cur_weather
+    assert chat.get_request_type_by_keywords(keywords) == src.weather_connect.request_type_cur_weather
 
     keywords = ["сейчас"]
-    assert chat.get_request_type_by_keywords(keywords) == chat.request_type_cur_weather
+    assert chat.get_request_type_by_keywords(keywords) == src.weather_connect.request_type_cur_weather
 
     keywords = ["питер", "завтра", "погода"]
-    assert chat.get_request_type_by_keywords(keywords) == chat.request_type_tomorrow
+    assert chat.get_request_type_by_keywords(keywords) == src.weather_connect.request_type_tomorrow
 
 
 def test_is_locative():
