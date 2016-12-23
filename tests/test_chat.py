@@ -57,10 +57,16 @@ def test_is_locative():
     token = "питере"
     assert chat.is_locative(token) is True
 
+    token = "москва"
+    assert chat.is_locative(token) is False
+
+    token = "байкале"
+    assert chat.is_locative(token) is True
+
 
 def test_get_location():
     tokens = ["нет", "формы", "loc2"]
     assert chat.get_location(tokens) == chat.default_location
 
     tokens = ["есть", "форма", "loc2", "питере"]
-    assert chat.get_location() == "питер"
+    assert chat.get_location(tokens) == "питер"

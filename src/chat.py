@@ -78,18 +78,8 @@ def get_request_type_and_location(message):
         else:
             request_type = request_type_default
 
-        # todo get location
         location = get_location(without_keywords)
     return request_type, location
-
-    # if len(tokens) > 1:
-    #     # todo Выделяем ключевые слова отдельно. В остатке проверяем loc2, берем его, если есть. Если нет, просто остаток.
-    #     keywords = filter(is_keyword, tokens)
-    #     without_keywords = ...
-    #     location = ...
-    #
-    # else:
-    #     pass
 
 
 def get_location(tokens_without_keywords):
@@ -110,12 +100,18 @@ def get_location(tokens_without_keywords):
 
 def is_locative(token):
     """
-    check if token is in locative form
+    check if token is in locative form (loct или loc2)
     :param token:
     :return:
     """
-    # todo
-    pass
+    parse = g_morph.parse(token)
+    first_parse = parse[0]
+    tag = first_parse.tag
+
+    if 'loct' in tag:
+        return True
+    else:
+        return False
 
 
 def get_request_type_by_keywords(keywords):
