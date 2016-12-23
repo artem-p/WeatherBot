@@ -5,6 +5,7 @@ import pymorphy2
 from nltk.corpus import stopwords
 
 from src.weather_connect import request_type_none, request_type_cur_weather, request_type_tomorrow, request_type_default
+import src.weather_connect as weather_connect
 
 default_location = "Санкт-Петербург"
 
@@ -18,7 +19,7 @@ def get_response(message):
     :param message:
     :return: str
     """
-    request_type, url = get_request_info_by_message(message)
+    request_type, url, location = get_request_info_by_message(message)
 
     if request_type is not request_type_none:
         # todo owm request
@@ -35,16 +36,11 @@ def get_request_info_by_message(message):
 
     :return: type: request type constant, url: str
     """
-    request_type = request_type_none
-    request_url = ""
 
     request_type, location = get_request_type_and_location(message)
+    request_url = weather_connect.get_request_url(request_type)
 
-    if request_type is not request_type_none:
-        # todo make request url from type and location
-        pass
-
-    return request_type, request_url
+    return request_type, request_url, location
 
 
 def get_request_type_and_location(message):
@@ -55,28 +51,30 @@ def get_request_type_and_location(message):
     """
     tokens = tokenize(message)
     location = default_location
-    request_type = request_type_cur_weather
+    request_type = request_type_none
 
-    if len(tokens) == 1:
-        token = tokens[0]
-        if is_keyword(token):
-            # we have keyword, location will be default
-            request_type = get_request_type_by_keywords(token)
-            location = default_location
+    if len(tokens) > 0:
+        if len(tokens) == 1:
+            token = tokens[0]
+            if is_keyword(token):
+                # we have keyword, location will be default
+                request_type = get_request_type_by_keywords(token)
+                location = default_location
+            else:
+                # assume that it is location, request type current by default
+                request_type = request_type_default
+                location = token
         else:
-            # assume that it is location, request type current by default
-            request_type = request_type_default
-            location = token
-    else:
-        keywords = list(filter(is_keyword, tokens))
-        without_keywords = list(filter(not is_keyword, tokens))
+            keywords = list(filter(is_keyword, tokens))
+            without_keywords = list(filter(not is_keyword, tokens))
 
-        if len(keywords) > 0:
-            request_type = get_request_type_by_keywords(keywords)
-        else:
-            request_type = request_type_default
+            if len(keywords) > 0:
+                request_type = get_request_type_by_keywords(keywords)
+            else:
+                request_type = request_type_default
 
-        location = get_location(without_keywords)
+            location = get_location(without_keywords)
+
     return request_type, location
 
 
