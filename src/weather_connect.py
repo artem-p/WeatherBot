@@ -11,7 +11,7 @@ def get_request_url(request_type):
     :param location:
     :return: str
     """
-    current_url = weather_service_base + "current/"
+    current_url = weather_service_base + "current"
     default_url = current_url
 
     if request_type == request_type_cur_weather:

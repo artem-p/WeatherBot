@@ -15,21 +15,14 @@ AVAILABLE_COMMANDS = """Доступные команды:
 /weather: текущая погода
 /tomorrow: прогноз на завтра"""
 
-weather.get_current_weather()
-
 
 def handle_message(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
 
     message = msg['text']
-    request_type, request_url = chat.get_request_info_by_message(message)
+    response = chat.get_response(message)
 
-    if request_type == src.weather_connect.request_type_cur_weather:
-        cur_weather_request = requests.get(request_url)
-        if cur_weather_request.status_code == 200:
-            bot.sendMessage(chat_id, cur_weather_request.json())
-        else:
-            bot.sendMessage(chat_id, "Не удалось получить текущую погоду")
+    bot.sendMessage(chat_id, response)
 
     # if command == '/ping':
     #     bot.sendMessage(chat_id, 'pong')

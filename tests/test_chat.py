@@ -40,6 +40,9 @@ def test_get_request_type_and_location():
     message = "Питер"
     assert chat.get_request_type_and_location(message) == (src.weather_connect.request_type_cur_weather, "питер")
 
+    message = "Погода в Питере"
+    assert chat.get_request_type_and_location(message) == (src.weather_connect.request_type_cur_weather, "питер")
+
 
 def test_get_request_type_by_keywords():
     keywords = ["погода", "питер"]

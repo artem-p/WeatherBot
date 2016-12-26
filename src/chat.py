@@ -1,11 +1,12 @@
 import string
-
+import requests
 import nltk
 import pymorphy2
 from nltk.corpus import stopwords
 
 from src.weather_connect import request_type_none, request_type_cur_weather, request_type_tomorrow, request_type_default
 import src.weather_connect as weather_connect
+
 
 default_location = "Санкт-Петербург"
 
@@ -22,11 +23,14 @@ def get_response(message):
     request_type, url, location = get_request_info_by_message(message)
 
     if request_type is not request_type_none:
-        # todo owm request
-        pass
+        weather_request = requests.get(url, {'location': location})
+
+        if weather_request.status_code == 200:
+            return weather_request.json()
+        else:
+            return "Не удалось получить данные"
     else:
-        # todo return cannot parse request
-        pass
+        return "Не удалось распознать запрос"
 
 
 def get_request_info_by_message(message):
@@ -66,7 +70,7 @@ def get_request_type_and_location(message):
                 location = token
         else:
             keywords = list(filter(is_keyword, tokens))
-            without_keywords = list(filter(not is_keyword, tokens))
+            without_keywords = list(filter(lambda token: not is_keyword(token), tokens))
 
             if len(keywords) > 0:
                 request_type = get_request_type_by_keywords(keywords)
@@ -107,7 +111,7 @@ def is_locative(token):
     first_parse = parse[0]
     tag = first_parse.tag
 
-    if 'loct' in tag:
+    if 'loct' in tag or 'loc2' in tag:
         return True
     else:
         return False
