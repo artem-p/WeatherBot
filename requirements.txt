@@ -1,1 +1,4 @@
 telepot
+nltk
+pymorphy2
+requests

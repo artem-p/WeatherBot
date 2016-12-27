@@ -1,13 +1,11 @@
 # import telegram
 import time
 
-import requests
 import telepot
 
-import src.weather_connect
 from src import secrets, forecast
-from src.wunderground import weather
 from src import chat
+
 
 AVAILABLE_COMMANDS = """Доступные команды:
 
